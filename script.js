@@ -1,17 +1,37 @@
-const checks = document.querySelectorAll(".customCheck")
-const inputs = document.querySelectorAll(".addGoal")
+const checkBoxList = document.querySelectorAll(".customCheck");
+const inputFields = document.querySelectorAll(".addGoal");
+const line = document.querySelector(".line");
+const progress = document.querySelector(".progress");
 
-checks.forEach((check) => {
-    check.addEventListener("click", (e)=>{
-        console.log(e)
-        check.classList.toggle("completed")
-        let input = check.nextElementSibling;
-        if(check.classList.contains("completed")){
-            input.style.textDecoration = "line-through";
-            input.style.color = "green";
+checkBoxList.forEach((checkBox) => {
+    checkBox.addEventListener("click", (e) => {
+        let inputField = [...inputFields].every((input) => {
+            return input.value
+        })
+
+        if (inputField) {
+            checkBox.parentElement.classList.toggle("completed")
         }else{
-            input.style.textDecoration = "none";
-            input.style.color = "black";
+            line.classList.add("showError")
         }
+
+    })
+})
+
+inputFields.forEach((input) => {
+    input.addEventListener("focus", () => {
+        line.classList.remove("showError")
+    })
+})
+
+const allGoals = {}
+
+inputFields.forEach((inputs) => {
+    inputs.addEventListener('input', (e) => {
+        allGoals[inputs.id] = {
+            name : inputs.value,
+            completed : false
+        }
+        localStorage.setItem("allGoals", JSON.stringify(allGoals))
     })
 })
